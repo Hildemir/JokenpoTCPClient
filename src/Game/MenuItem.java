@@ -12,7 +12,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-
 public class MenuItem extends Element{
     private String item;
     private Color color;
@@ -23,32 +22,7 @@ public class MenuItem extends Element{
     private Image buttonImage;
     private ImageView buttonImageV;
 
-
-    // CONSTRUTOR
-    public MenuItem(String item, Color color, GraphicsContext gc,
-                    String fontName, double posX, double posY, double textSize, Group root) {
-        super(posX,posY,gc);
-
-        this.fontName = Font.loadFont(Main.class.getClassLoader().getResourceAsStream(fontName),textSize);
-        this.text = new Text(item);
-        text.setFont(this.fontName);
-        // posicoes x0 x1 y0 y1 das palavras do menu para poder identificar a posicao do mouse dentro dela
-        setX0(getPosX() - text.getBoundsInLocal().getWidth()/2);
-        setX1(getPosX() + text.getBoundsInLocal().getWidth()/2);
-        setY0(getPosY() - text.getBoundsInLocal().getHeight()/2);
-        setY1(getPosY() + text.getBoundsInLocal().getHeight()/2);
-        this.item = item;
-        this.color = color;
-        this.textSize = textSize;
-    }
-
-    public void setOnMouseClicked(EventHandler<MouseEvent> event){
-        super.setOnMouseClicked(event);
-        if (buttonImage != null) {
-            buttonImageV.setOnMouseClicked(event);
-        }
-    }
-
+    // [Construtor]
     public MenuItem (Image buttonImage, double posX, double posY, GraphicsContext gc, Group root) {
         super(posX, posY, gc);
         this.buttonImage = buttonImage;
@@ -64,6 +38,24 @@ public class MenuItem extends Element{
         addToView(root);
     }
 
+    // [Desenha menuItem]
+    public void drawing(MouseEvent mouse, KeyEvent key, Group root) {
+        event(mouse,key);
+        getGc().setTextAlign(alignment);
+        getGc().setFont(fontName);
+        // getGc().setStroke(Color.rgb(59,0,121));
+        getGc().setFill(color);
+        getGc().fillText(item,getPosX(), getPosY());
+        getGc().strokeText(item, getPosX(), getPosY());
+    }
+
+    public void setOnMouseClicked(EventHandler<MouseEvent> event){
+        super.setOnMouseClicked(event);
+        if (buttonImage != null) {
+            buttonImageV.setOnMouseClicked(event);
+        }
+    }
+
     public void addToView(Group root) {
         root.getChildren().add(buttonImageV);
     }
@@ -71,46 +63,4 @@ public class MenuItem extends Element{
     public void removeFromView(Group root) {
         root.getChildren().remove(buttonImageV);
     }
-
-    public void drawing(MouseEvent mouse, KeyEvent key, Group root) {
-        event(mouse,key);
-        getGc().setTextAlign(alignment);
-        getGc().setFont(fontName);
-       // getGc().setStroke(Color.rgb(59,0,121));
-        getGc().setFill(color);
-        getGc().fillText(item,getPosX(), getPosY());
-        getGc().strokeText(item, getPosX(), getPosY());
-    }
-
-    public void drawing(MouseEvent mouse, Group root) {
-        event(mouse);
-        getGc().drawImage(buttonImage,getPosX(),getPosY(),buttonImage.getWidth(),buttonImage.getHeight());
-    }
-
-    public void setVisible(boolean value, GraphicsContext gc){
-        if(value == true){
-            gc.setFill(Color.WHITE);
-        } else {
-            gc.setFill(Color.YELLOW);
-        }
-    }
-
-    public void drawingSoundButtonOn(MouseEvent mouse, Group root){
-//        getGc().drawImage(buttonImage,getPosX(),getPosY(),buttonImage.getWidth()/8,buttonImage.getHeight()/8);
-    }
-
-    public void drawingSoundButtonOff(MouseEvent mouse){
-        getGc().drawImage(buttonImage,getPosX(),getPosY(),buttonImage.getWidth()/8,buttonImage.getHeight()/8);
-    }
-
-
-    // GETS E SETS
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
 }

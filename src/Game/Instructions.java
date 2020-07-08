@@ -6,13 +6,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-
-import java.util.List;
 
 public class Instructions {
     private GraphicsContext gc;
@@ -22,7 +15,7 @@ public class Instructions {
     private static double w = 1500, h = 900;
     private MenuItem backButton, playButton;
 
-
+    // [Construtor]
     public Instructions(GraphicsContext gc, Status status, Group root) {
         this.gc = gc;
         this.status = status;
@@ -34,7 +27,7 @@ public class Instructions {
         playButton.removeFromView(root);
     }
 
-
+    // [Carrega images]
     private void images() {
         backgroundImg = new Image("/Resources/raysInstruction.jpg");
         perg = new Image("/Resources/pergaminhoInstrucoesTeste.png");
@@ -42,6 +35,7 @@ public class Instructions {
         play = new Image("/Resources/play.png");
     }
 
+    // [Desenha tela Instructions]
     public void drawing( KeyEvent key, Group root ){
         gc.drawImage(backgroundImg, 0,0,w,h);
         gc.drawImage(perg, 150,-100,1200,1100);
@@ -71,16 +65,6 @@ public class Instructions {
 
             }
         });
-
-        //text.drawing(mouse, key, root);
-
-        //gc.drawImage(titleMenu, 490, 120, 900, 300,);
     }
 
-//    MIAAAU,
-//    Jokenpo é uma brincadeira japonesa, onde dois jogadores escolhem um dentre três possíveis itens: Pedra, Papel ou Tesoura.
-//* Pedra empata com Pedra e ganha de Tesoura
-//* Tesoura empata com Tesoura e ganha de Papel
-//* Papel empata com Papel e ganha de Pedra
-//    Então, mãos e patas aquecidas, VAMOS LÁ!!
 }

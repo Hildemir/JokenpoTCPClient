@@ -9,26 +9,115 @@ public class RoundResult {
     private GraphicsContext gc;
     private Status status;
     private Group root;
-    private Image backgroundImg, waitingOpponent, rockImg, paperImg, scissorImg, loading, circle, yourPoints;
+    private Image backgroundImg, title, rockImg, paperImg, scissorImg, winnerRightArrow, winnerLeftArrow, deadlock, result, youLose, youWin, deadlockMessage;
     private static double w = 1500, h = 900;
-    private MenuItem rock, paper, scissor;
-    private int choice, points;
+    private int  points, serverPoints, jogada, jogadaServidor;
+    private boolean contaPonto;
 
-
+    // [Construtor]
     public RoundResult(GraphicsContext gc, Status status, Group root) {
         this.gc = gc;
         this.status = status;
         this.root = root;
         images();
+        this.points = 0;
+        this.serverPoints = 0;
+        this.contaPonto = true;
     }
 
+    // [Carrega imagens]
     private void images() {
         backgroundImg = new Image("/Resources/rays.jpg");
+        rockImg = new Image("/Resources/rock.png");
+        paperImg = new Image("/Resources/paper.png");
+        scissorImg = new Image("/Resources/scissor.png");
+        winnerRightArrow = new Image("/Resources/winnerRightArrow.png");
+        winnerLeftArrow = new Image("/Resources/winnerLeftArrow.png");
+        deadlock = new Image("/Resources/deadlock.png");
+        youLose = new Image("/Resources/youLose.png");
+        youWin = new Image("/Resources/youWin.png");
+        deadlockMessage = new Image("/Resources/deadlockMessage.png");
     }
 
+    // [Desenha tela RoundResult]
+    public void drawing(KeyEvent key, Group root, Game gameScreen, TCPClient client) {
 
-    public void drawing(KeyEvent key, Group root) {
-         gc.drawImage(backgroundImg, 0, 0, w, h);
+        this.jogada = client.getJogada();
+        this.jogadaServidor = client.getJogadaServidor();
+
+        if(client.getJogadaServidor() == 0 || client.getJogada() == 0 ){
+            Main.setStatus(Status.GAME);
+            gameScreen.setButtonsOn(false);
+        } else {
+            // [Exibe carta jogada pelo cliente]
+            gc.drawImage(backgroundImg, 0, 0, w, h);
+            if (jogada == 1) {
+                gc.drawImage(rockImg, 250, 270);
+            } else if (jogada == 2) {
+                gc.drawImage(paperImg, 250, 270);
+            } else if (jogada == 3) {
+                gc.drawImage(scissorImg, 250, 270);
+            }
+
+            // [Exibe carta jogada pelo servidor]
+            if (jogadaServidor == 1) {
+                gc.drawImage(rockImg, 920, 270);
+            } else if (jogadaServidor == 2) {
+                gc.drawImage(paperImg, 920, 270);
+            } else if (jogadaServidor == 3) {
+                gc.drawImage(scissorImg, 920, 270);
+            }
+
+            // [Exibindo resultado por partida]
+            if (jogada == jogadaServidor) {
+                title = deadlockMessage;
+                result = deadlock;
+            } else if (jogada == 1 && jogadaServidor == 2) {
+                title = youLose;
+                result = winnerLeftArrow;
+            } else if (jogada == 1 && jogadaServidor == 3) {
+                title = youWin;
+                result = winnerRightArrow;
+            } else if (jogada == 2 && jogadaServidor == 1) {
+                title = youWin;
+                result = winnerRightArrow;
+            } else if (jogada == 2 && jogadaServidor == 3) {
+                title = youLose;
+                result = winnerLeftArrow;
+            } else if (jogada == 3 && jogadaServidor == 1) {
+                title = youLose;
+                result = winnerLeftArrow;
+            } else if (jogada == 3 && jogadaServidor == 2) {
+                title = youWin;
+                result = winnerRightArrow;
+            }
+
+            if(title == youWin && contaPonto){
+                points++;
+                contaPonto = false;
+                System.out.println(points);
+            } else if(title == youLose && contaPonto){
+                serverPoints++;
+                contaPonto = false;
+            }
+            gc.drawImage(title, 330, 20, 800, 200);
+            gc.drawImage(result, 650, 300);
+
+            if(points == 3 || serverPoints == 3){
+                Main.setStatus(Status.GAMEOVER);
+            }
+        }
     }
 
+    public int getPoints() {
+        return points;
+    }
+
+    public int getServerPoints() {
+        return serverPoints;
+    }
+
+    public void setContaPonto(boolean contaPonto) {
+        this.contaPonto = contaPonto;
+    }
 }

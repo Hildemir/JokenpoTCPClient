@@ -8,28 +8,23 @@ import javafx.scene.input.MouseEvent;
 
 public abstract class Element implements Drawable{
     private double x0,x1,y0,y1 , x , y;
-    private EventHandler<MouseEvent> onMouseClicked,onMouseExited,onMouseEntered;
+    private EventHandler<MouseEvent> onMouseClicked;
     private GraphicsContext gc;
     private boolean inside = false;
 
+    // [Construtor]
     public Element(double x, double y, GraphicsContext gc) {
         this.x = x;
         this.y = y;
         this.gc = gc;
     }
 
-
-    // MOUSE EVENT
-    public void setOnMouseEntered (EventHandler<MouseEvent> onMouseEntered) {
-        this.onMouseEntered = onMouseEntered;
-    }
-    public void setOnMouseExited (EventHandler<MouseEvent> onMouseExited) {
-        this.onMouseExited = onMouseExited;
-    }
+    // [On mouse event]
     public void setOnMouseClicked (EventHandler <MouseEvent> onMouseClicked) {
         this.onMouseClicked = onMouseClicked;
     }
-    // VERIFICA O EVENTO DO MOUSE
+
+    // [Verifica evento no mouse]
     public void event(MouseEvent mouse, KeyEvent key) {
         if(mouse == null) {
             return;
@@ -39,34 +34,10 @@ public abstract class Element implements Drawable{
                 System.out.println(mouse.getClickCount());
                 onMouseClicked.handle(mouse);
             }
-            if(onMouseEntered != null && mouse.getEventType().getName().equals("MOUSE_MOVED") && !inside) {
-                onMouseEntered.handle(mouse);
-                inside = true;
-            } else if(onMouseExited != null && mouse.getEventType().getName().equals("MOUSE_MOVED") && inside) {
-                onMouseExited.handle(mouse);
-                inside = false;
-            }
         }
     }
-    public void event(MouseEvent mouse) {
-        if(mouse == null) {
-            return;
-        }
-        if(inside(mouse)) {
-            if (onMouseClicked != null && mouse.getEventType().getName().equals("MOUSE_CLICKED")) {
-                System.out.println(mouse.getClickCount());
-                onMouseClicked.handle(mouse);
-            }
-            if(onMouseEntered != null && mouse.getEventType().getName().equals("MOUSE_MOVED") && !inside) {
-                onMouseEntered.handle(mouse);
-                inside = true;
-            } else if(onMouseExited != null && mouse.getEventType().getName().equals("MOUSE_MOVED") && inside) {
-                onMouseExited.handle(mouse);
-                inside = false;
-            }
-        }
-    }
-    // VERIFICA SE O MOUSE ESTA DENTRO DE DETERMINADA AREA
+
+    // [Verifica se o mouse esta dentro de determinada area]
     private boolean inside(MouseEvent mouse, double x0, double x1, double y0, double y1) {
         if(mouse != null) {
             return (mouse.getX() > x0 && mouse.getX() < x1 && mouse.getY() > y0 && mouse.getY() < y1);
@@ -74,12 +45,13 @@ public abstract class Element implements Drawable{
             return false;
         }
     }
+
     private boolean inside(MouseEvent event) {
         return inside(event, x0, x1, y0, y1);
     }
 
 
-    //GEST E SETS
+    // [Getters e setters]
     public GraphicsContext getGc() {
         return gc;
     }

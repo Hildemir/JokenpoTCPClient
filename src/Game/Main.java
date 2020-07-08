@@ -1,10 +1,4 @@
 package Game;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -19,11 +13,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-
-/**
- *
- * @author almirpires
- */
 public class Main extends Application {
     private static double w = 1500, h = 900;
     private Group root;
@@ -51,12 +40,13 @@ public class Main extends Application {
         root.getChildren().add(0, canvas);
         menu = new Menu(gc, status, root);
         instructions = new Instructions(gc, status, root);
+        TCPClient client = new TCPClient();
         Game gameScreen = new Game(gc, status, root);
         WaitToPlay waitToPlay = new WaitToPlay(gc, status, root);
         WaitingOpponent waitingOpponent = new WaitingOpponent(gc, status, root);
         RoundResult roundResult = new RoundResult(gc, status, root);
         //GameOver gameOver = new GameOver(gc);
-        TCPClient client = new TCPClient();
+
 
         canvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -66,36 +56,7 @@ public class Main extends Application {
             }
         });
 
-        canvas.setOnMouseMoved(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                mouse = mouseEvent;
-//                System.out.println(mouseEvent.getX() + " " + mouseEvent.getY() + " " + mouseEvent.getEventType().getName());
-            }
-        });
-
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                if (keyEvent.getCode() == KeyCode.SPACE) {
-                    if (!keyPressed) {
-                        key = keyEvent;
-                        keyPressed = true;
-                    }
-                } else {
-                    key = keyEvent;
-                }
-            }
-        });
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                key = null;
-                if (keyEvent.getCode() == KeyCode.SPACE)
-                    keyPressed = false;
-            }
-        });
-
+        // [Game loop]
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -111,11 +72,11 @@ public class Main extends Application {
                         checkConexaoComServidor = true;
                     }
                 } else if(status == Status.GAME) {
-                    gameScreen.drawing(key, root, client.getOutObject());
+                    gameScreen.drawing(key, root, client, roundResult);
                 } else if(status == Status.WAITINGOPPONENT) {
-                    waitingOpponent.drawing(key, root, gameScreen.getChoice());
+                    waitingOpponent.drawing(key, root, client, roundResult);
                 }else if(status == Status.ROUNDRESULT){
-                    roundResult.drawing(key, root);
+                    roundResult.drawing(key, root, gameScreen, client);
                 } else if(status == Status.INSTRUCTIONS){
                     instructions.drawing(key, root);
 
