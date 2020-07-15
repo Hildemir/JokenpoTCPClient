@@ -19,7 +19,7 @@ public class TCPClient {
     // [Inicia conexao com servidor]
     public void conectarServidor() {
 
-        new Thread() {
+        new  Thread() {
 
             @Override
             public void run() {
@@ -36,16 +36,29 @@ public class TCPClient {
                         }
                         System.out.println("lendo servidor...");
                         jogadaServidor = inObject.read();
-                        System.out.println("jogada servidor: " + jogadaServidor);
-                        // [Tela de jogo eh desenhada apos receber jogada do servidor]
-                        Main.setStatus(Status.GAME);
-                        if(jogadaServidor > 0 && jogada > 0){
-                            Main.setStatus(Status.ROUNDRESULT);
-                            // [Reinicia a jogada]
-                            setJogada(0);
-//                            setJogadaServidor(0);
-                        }
 
+                        // [Receber 5 significa servidor desligado]
+                        if(jogadaServidor == 5){
+
+                            // [Encerra conexao]
+                            client.close();
+                            // [Thread interrompida]
+                            this.interrupt();
+                            // [Exibe tela de GameOver apos receber 5 do server]
+                            Main.setStatus(Status.GAMEOVER);
+                            break;
+                        } else {
+                            System.out.println("jogada servidor: " + jogadaServidor);
+
+                            // [Tela de jogo eh desenhada apos receber jogada do servidor != 5]
+                            Main.setStatus(Status.GAME);
+                            if (jogadaServidor > 0 && jogada > 0) {
+                                Main.setStatus(Status.ROUNDRESULT);
+                                // [Reinicia a jogada]
+                                setJogada(0);
+                            }
+
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

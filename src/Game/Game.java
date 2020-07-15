@@ -17,7 +17,6 @@ public class Game {
     private static double w = 1500, h = 900;
     private MenuItem rock, paper, scissor;
     private int choice, points, serverPoints;
-    private int jogadaServidor;
     boolean buttonsOn;
 
     // [Construtor]

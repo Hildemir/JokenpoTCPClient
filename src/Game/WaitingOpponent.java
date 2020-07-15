@@ -9,17 +9,14 @@ public class WaitingOpponent {
     private GraphicsContext gc;
     private Status status;
     private Group root;
-    private Image backgroundImg, waitingOpponent, rockImg, paperImg, scissorImg, loading, circle, yourPoints;
+    private Image backgroundImg, waitingOpponent, rockImg, paperImg, scissorImg, loading;
     private static double w = 1500, h = 900;
-    private int choice, points;
 
     // [Construtor]
     public WaitingOpponent(GraphicsContext gc, Status status, Group root) {
         this.gc = gc;
         this.status = status;
         this.root = root;
-        //this.choice = -1;
-        // this.points = 0;
         images();
     }
 
@@ -34,7 +31,7 @@ public class WaitingOpponent {
     }
 
     // [Desenha tela WaintingOpponent]
-    public void drawing(KeyEvent key, Group root, TCPClient client, RoundResult roundResult) {
+    public void drawing(KeyEvent key, Group root, TCPClient client) {
         gc.drawImage(backgroundImg, 0, 0, w, h);
         gc.drawImage(waitingOpponent, 330, 20, 800, 200);
         gc.drawImage(loading, 550, 300, 400, 300);
@@ -48,10 +45,7 @@ public class WaitingOpponent {
             gc.drawImage(scissorImg, 250, 270);
         }
 
-//        System.out.println("valor de jogada: " + client.getJogada());
-//        System.out.println("valor de jogada servidor: " + client.getJogadaServidor());
-
-        // [Se os 2 jogadores ja tiverem jogado, manda para atela RoundResult]
+        // [Se os 2 jogadores ja tiverem jogado, manda para a tela RoundResult]
         if(client.getJogada() > 0 && client.getJogadaServidor() > 0){
             Main.setStatus(Status.ROUNDRESULT);
         }

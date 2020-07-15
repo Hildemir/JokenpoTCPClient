@@ -14,6 +14,7 @@ public class Instructions {
     private Image backgroundImg, perg, arrow, play;
     private static double w = 1500, h = 900;
     private MenuItem backButton, playButton;
+    private boolean buttonsOn;
 
     // [Construtor]
     public Instructions(GraphicsContext gc, Status status, Group root) {
@@ -25,6 +26,7 @@ public class Instructions {
         backButton.removeFromView(root);
         this.playButton = new MenuItem(play, 500,570,gc,root);
         playButton.removeFromView(root);
+        this.buttonsOn = false;
     }
 
     // [Carrega images]
@@ -39,9 +41,11 @@ public class Instructions {
     public void drawing( KeyEvent key, Group root ){
         gc.drawImage(backgroundImg, 0,0,w,h);
         gc.drawImage(perg, 150,-100,1200,1100);
-        backButton.addToView(root);
-        playButton.addToView(root);
-
+        if(!buttonsOn) {
+            backButton.addToView(root);
+            playButton.addToView(root);
+            setButtonsOn(true);
+        }
         backButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -51,6 +55,8 @@ public class Instructions {
                 for (MenuItem item: Main.menu.getItems()) {
                     item.addToView(root);
                 }
+                // [Reinicia estado dos botoes]
+                setButtonsOn(false);
                 Main.setStatus(Status.MENU);
 
             }
@@ -61,10 +67,15 @@ public class Instructions {
             public void handle(MouseEvent mouseEvent) {
                 //remove botao de voltar
                 root.getChildren().remove(1, root.getChildren().size());
+                // [Reinicia estado dos botoes]
+                setButtonsOn(false);
                 Main.setStatus(Status.WAITTOPLAY);
 
             }
         });
     }
 
+    public void setButtonsOn(boolean buttonsOn) {
+        this.buttonsOn = buttonsOn;
+    }
 }

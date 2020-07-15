@@ -45,7 +45,7 @@ public class Main extends Application {
         WaitToPlay waitToPlay = new WaitToPlay(gc, status, root);
         WaitingOpponent waitingOpponent = new WaitingOpponent(gc, status, root);
         RoundResult roundResult = new RoundResult(gc, status, root);
-        //GameOver gameOver = new GameOver(gc);
+        GameOver gameOver = new GameOver(gc, root);
 
 
         canvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -64,21 +64,31 @@ public class Main extends Application {
 
                 if (status == Status.MENU) {
                     menu.drawing(mouse, key, root);
+
                 } else if(status == Status.WAITTOPLAY){
                     waitToPlay.drawing(key, root);
-                    //tentando encontrar o servidor
-                    if(checkConexaoComServidor == false){
+                    // [Tentando encontrar o servidor]
+                    if(!checkConexaoComServidor){
                         client.conectarServidor();
                         checkConexaoComServidor = true;
                     }
+
                 } else if(status == Status.GAME) {
+                    // [Reseta para futuras partidas]
+                    checkConexaoComServidor = false;
                     gameScreen.drawing(key, root, client, roundResult);
+
                 } else if(status == Status.WAITINGOPPONENT) {
-                    waitingOpponent.drawing(key, root, client, roundResult);
+                    waitingOpponent.drawing(key, root, client);
+
                 }else if(status == Status.ROUNDRESULT){
-                    roundResult.drawing(key, root, gameScreen, client);
+                    roundResult.drawing(key, root, gameScreen, client, gameOver);
+
                 } else if(status == Status.INSTRUCTIONS){
                     instructions.drawing(key, root);
+
+                } else if(status == Status.GAMEOVER){
+                    gameOver.drawing(key, root, menu, client);
 
                 } else if (status == Status.CLOSE) {
                     primaryStage.close();

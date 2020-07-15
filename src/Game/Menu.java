@@ -17,6 +17,7 @@ public class Menu implements Drawable{
     private static double w = 1500, h = 900;
     private List<MenuItem> items;
     private Group root;
+    private boolean buttonsOn;
 
     // [Construtor]
     public Menu(GraphicsContext gc, Status status, Group root) {
@@ -27,6 +28,7 @@ public class Menu implements Drawable{
         buttons();
         menuItems();
         images();
+        this.buttonsOn = false;
     }
 
     // [Carrega imagens]
@@ -50,13 +52,13 @@ public class Menu implements Drawable{
         gc.drawImage(backgroundImg, 0,0,w,h);
         gc.drawImage(gatoSorte, 100,100,500,800);
         gc.drawImage(titleMenu, 490, 120, 900, 300);
-    }
 
-    // [Cria botoes]
-    private void menuItems() {
-        items.add(new MenuItem(playButton,710,393, gc, root));
-        items.add(new MenuItem(instructionsButton,710,535, gc, root));
-        items.add(new MenuItem(perg,710,675, gc, root));
+        if(!buttonsOn){
+            items.get(0).addToView(root);
+            items.get(1).addToView(root);
+            items.get(2).addToView(root);
+            setButtonsOn(true);
+        }
 
         items.get(0).setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -82,8 +84,22 @@ public class Menu implements Drawable{
         });
     }
 
+    // [Cria botoes]
+    private void menuItems() {
+        items.add(new MenuItem(playButton,710,393, gc, root));
+        items.get(0).removeFromView(root);
+        items.add(new MenuItem(instructionsButton,710,535, gc, root));
+        items.get(1).removeFromView(root);
+        items.add(new MenuItem(perg,710,675, gc, root));
+        items.get(2).removeFromView(root);
+    }
+
     // [Getters e setters]
     public List<MenuItem> getItems() {
         return items;
+    }
+
+    public void setButtonsOn(boolean buttonsOn) {
+        this.buttonsOn = buttonsOn;
     }
 }

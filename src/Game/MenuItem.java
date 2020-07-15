@@ -31,8 +31,6 @@ public class MenuItem extends Element{
         setY0(getPosY() - buttonImage.getRequestedHeight()/2);
         setY1(getPosY() + buttonImage.getRequestedHeight()/2);
         buttonImageV = new ImageView(buttonImage);
-//        buttonImageV.setScaleX(1);
-//        buttonImageV.setScaleY(1);
         buttonImageV.setX(getPosX() );
         buttonImageV.setY(getPosY() );
         addToView(root);
@@ -43,7 +41,6 @@ public class MenuItem extends Element{
         event(mouse,key);
         getGc().setTextAlign(alignment);
         getGc().setFont(fontName);
-        // getGc().setStroke(Color.rgb(59,0,121));
         getGc().setFill(color);
         getGc().fillText(item,getPosX(), getPosY());
         getGc().strokeText(item, getPosX(), getPosY());
