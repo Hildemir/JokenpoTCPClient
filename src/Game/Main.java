@@ -46,6 +46,8 @@ public class Main extends Application {
         WaitingOpponent waitingOpponent = new WaitingOpponent(gc, status, root);
         RoundResult roundResult = new RoundResult(gc, status, root);
         GameOver gameOver = new GameOver(gc, root);
+        primaryStage.setFullScreen(true);
+        primaryStage.setFullScreenExitHint("");
 
 
         canvas.setOnMouseClicked(new EventHandler<MouseEvent>() {

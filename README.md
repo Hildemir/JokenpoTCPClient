@@ -36,6 +36,6 @@ $ git clone https://github.com/Hildemir/JokenpoTCPServer
     - [Setup enviroment](https://www.tutorialspoint.com/java/java_environment_setup.htm)
 2.  [Download JavaFX](https://openjfx.io/)
 3.  Add JavaFX to your IDE
-4.  You should first run the server an then the client.
+4.  You should first run the server and then the client.
 ---
 Developed by [Hildemir Regis](https://github.com/Hildemir) and [Bianca Guerra](https://github.com/biawar) 😜

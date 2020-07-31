@@ -28,7 +28,7 @@ public class TCPClient {
                 while (true) {
                     try {
                         if(i == 0){
-                            InetAddress server = InetAddress.getLocalHost();
+                            InetAddress server = InetAddress.getByName("0.0.0.0");  // [Aqui deve ficar o ip do computador que sera o servidor]
                             client = new Socket(server, 16868);
                             outObject = new ObjectOutputStream(client.getOutputStream());
                             inObject = new ObjectInputStream(client.getInputStream());
